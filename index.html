@@ -245,7 +245,7 @@ const PX=60;let ign=0;
 function upd(){const T=total();$('#tc').textContent=fmt(t)+' / '+fmt(T);if(playing){ign=performance.now();$('#sc').scrollLeft=t*PX}}
 $('#sc').onscroll=()=>{if(playing||performance.now()-ign<120)return;t=Math.min(total(),$('#sc').scrollLeft/PX);draw();$('#tc').textContent=fmt(t)+' / '+fmt(total())};
 $('#sc').addEventListener('touchstart',()=>{if(playing)pause()});
-$('#cl').onclick=()=>{sheet=false;panel()};$('#ex').onclick=()=>exportV();
+$('#ex').onclick=()=>exportV();
 $('#qsel').onchange=e=>{S.res=e.target.value;S.mb={720:'8',1080:'16',1440:'25',2160:'40'}[S.res];size()};
 $('#pp').onclick=()=>playing?pause():play();
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key=='z'){e.preventDefault();undo()}if(e.code=='Space'&&!/INPUT|SELECT/.test(e.target.tagName)){e.preventDefault();$('#pp').click()}});
@@ -689,7 +689,6 @@ stepTrack=function(st,F){
 const pred={x:st.pos.x+st.vel.x,y:st.pos.y+st.vel.y},
 S=st.S*(1+Math.min(st.lost,8)*.35),T=compose(st.Tc,st.T0);
 let r=searchT(F,T,pred.x,pred.y,S);
-/* target dhabame -> fuula guutuu irra deebi'ee barbaada */
 if(r.s<.5&&st.lost>=3){const g=searchT(F,st.T0,F.W/2,F.H/2,Math.max(F.W,F.H));if(g.s>r.s&&g.s>.55)r=g}
 const ok=r.s>=.45;
 if(ok){
@@ -702,7 +701,7 @@ st.lost++;st.vel.x*=.85;st.vel.y*=.85;
 st.pos={x:Math.max(st.R,Math.min(F.W-st.R-1,pred.x)),y:Math.max(st.R,Math.min(F.H-st.R-1,pred.y))}}
 return{x:st.pos.x,y:st.pos.y,q:ok?r.s:0,ok}};
 
-/* 5) CapCut+ panel: Mute, Opacity, Retouch, Relight, Remove BG, Motion blur, Record, Voice, Quality, Motion */
+/* 5) CapCut+ panel */
 let mrec=null;
 async function recMic(){
 if(mrec){mrec.stop();return}
@@ -750,7 +749,8 @@ row(p,Object.keys(QP).map(k=>[k,()=>{save();Object.assign(c.f,QP[k]);panel();rd(
 row(p,[['720p',720,8],['1080p',1080,16],['2K',1440,25],['4K',2160,40]].map(([l,r,m])=>[l+' · '+m+'Mbps',()=>{S.res=String(r);S.mb=String(m);$('#qsel').value=S.res;size();say('Export '+l)}]));
 row(p,[['Auto sharpen: '+S.enh,()=>{S.enh=S.enh=='on'?'off':'on';panel();rd()}],['Apply to all clips',()=>{save();clips.forEach(z=>z.f={...c.f});rd()}]])};
 
-MAIN.splice(1,0,['cc','🎛','CapCut+']);CLIP.splice(1,0,['cc','🎛','CapCut+']);
+MAIN.splice(1,0,['cc','🎛','CapCut+']);
+CLIP.splice(1,0,['cc','🎛','CapCut+']);
 
 size();
 ui();
